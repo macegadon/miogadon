@@ -1,0 +1,67 @@
+<!DOCTYPE html> <!-- This announces to the machine that the file is written in HTML-->
+
+<!-- this is a comment, its not displayed on the page but you can use it to leave notes for youself/inquisitive visitors.-->
+
+<head> <!-- The head is where the page begins, here we give important instructons on how to display content contained on the page. -->
+    <link href="style/examplestyle.css" rel="stylesheet"> <!-- this links your HTML file to your style sheet, which gives instructions on how the page is displayed including; font, background, layout, favicon -->
+    <title>Text replacement example </title> <!-- dsplays in the tab -->
+</head>
+<body> <!-- This example page uses a simple button and javascript functions to swap text on the webpage, the text will only change once and will not change back. In the toggle text example the text will change back-->
+    <h1> <!-- poem title-->
+        <button id="swap1" class="swapbuttonheading" onclick="swapper1()">Cloud</button>Piece
+    </h1>
+    <p><!-- poem text-->
+        Imagine the <span id="swapone" >clouds</span><button id="swap2" class="swapbutton" onclick="swapper2()">dripping.</button><br> <!--the "br" element means break, as in line break, AKA end this line of text here.-->
+        Dig a hole in your garden to <br>
+        put them in.<br>
+        <button id="swap3" class="swapbutton" onclick="swapper3()">1963 Spring</button>
+    </p>
+    <script> // this is where the javascript functions begin
+    // heading swapper with 2 text changes attached to one button.
+        function swapper1(){
+    // select the button and the second span we want to change
+        const swap = document.getElementById("swap1");
+        const swapone = document.getElementById("swapone");
+    // define the function to change the HTML content
+        function changeContent1() {
+        swap.innerHTML = "Computer"; //because we are just changing the HTML we need to use "" or '' quotation marks
+        swapone.innerHTML = "computers"; //second word swap
+        }
+    // add event listener to the button
+        swap.addEventListener('click', changeContent1);
+        }
+
+    // dripping swapper
+        function swapper2(){
+    // select the button
+        const swap = document.getElementById('swap2');
+    // define the function to change the HTML content
+        function changeContent2() {
+        swap.innerHTML = 'coughing.';
+        }
+    // add event listener to the button
+        swap.addEventListener('click', changeContent2);
+        }
+
+    // date swapper
+        function swapper3(){
+    // select the button
+        const swap = document.getElementById('swap3');
+    // define the function to change the HTML content
+        function changeContent3() {
+        swap.innerHTML = 'Djeran 2024 [1963 Spring originally composed by Yoko Ono for <a href="https://en.wikipedia.org/wiki/Grapefruit_(book)" target="_blank"><i>Grapefruit</i></a>]';
+        }
+    // add event listener to the button
+        swap.addEventListener('click', changeContent3);
+        }
+        </script> <!-- javascript ended-->
+
+
+</body>
+<footer> <!-- The footer is a the end of the page, it's totally optional and typically contains a note about the last update, or a dis on your sworn enemy.-->
+    <p style="text-align: right;">
+        See code comments for more details. <br> 
+        Made with love by [your name here] &lt;3 <br>
+        <a href="index.html" target="_blank">*ੈ✩‧₊˚return.ೃ࿔꠶:･˳</a>
+    </p>
+</footer>

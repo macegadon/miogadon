@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Digital & New Media Art Reference List</title>
+  <style>
+    :root { /*Light Mode
+      --bg: #f5f3ef;
+      --surface: #ffffff;
+      --border: #e0dcd5;
+      --text: #1c1a18;
+      --muted: #706b64;
+      --hdr: #1c1a18;
+      */
+      /*Dark Mode*/
+      --bg: #1c1a18;
+      --surface: #1c1a18;
+      --border: #e0dcd5;
+      --text: #f5f3ef;
+      --muted: #706b64;
+      --hdr: #35312e;
+
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    .hidden { display: none; }
+    body { font-family: 'Lucida Console', "Courier New", monospace; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    header { background: var(--hdr); color: #f0ece4; padding: 2rem 2rem 1.6rem; text-align: center; }
+    header h1 { font-size: 1.6rem; font-weight: normal; letter-spacing: 0.12em; text-transform: uppercase; }
+    header p { margin-top: 0.4rem; color: #a09890; font-size: 0.82rem; }
+    footer p { margin-top: 0.68rem; color: #a09890; font-size: 0.82rem; }
+
+    .controls {
+      background: #1c1a18;/*var(--surface);*/
+      border-bottom: 2px solid var(--hdr);
+      padding: 1rem 1.5rem;
+      position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 4px 14px rgba(227, 227, 227, 0.09);
+    }
+    footer {
+      background: var(--surface);
+      border-top: 2px solid var(--hdr);
+      padding: 1rem 1.5rem;
+      position: sticky; top: 0; z-index: 100;
+      box-shadow: -4px -10px 14px rgba(227, 227, 227, 0.09);
+      text-align: center;
+    }
+    .search-row { display: flex; gap: 1rem; align-items: center; margin-bottom: 0.75rem; }
+    #search {
+      flex: 1; padding: 0.55rem 0.9rem;
+      border: 1px solid var(--border); border-radius: 3px;
+      font-size: 0.88rem; font-family: inherit; background: var(--bg); outline: none;
+    }
+    #search:focus { border-color: #888; }
+    .count { font-size: 0.78rem; color: var(--muted); font-family: 'Courier New', monospace; white-space: nowrap; }
+
+    .type-row { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.75rem; align-items: center; }
+    .type-label { font-size: 0.68rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-right: 0.2rem; }
+    .tbtn {
+      font-size: 0.7rem; padding: 0.26rem 0.65rem;
+      border-radius: 2px; cursor: pointer;
+      font-family: 'Courier New', monospace;
+      border: 1.5px solid transparent;
+      user-select: none; transition: opacity 0.15s;
+    }
+    .tbtn:hover { opacity: 0.8; }
+    .tbtn.ta { border-color: rgba(0,0,0,0.4) !important; }
+    .tbtn[data-t="All"]              { background: #e8e4e0; color: #4a4440; }
+    .tbtn[data-t="Artist"]           { background: #4a4440; color: #f0ece4; }
+    .tbtn[data-t="Tool"]             { background: #d4ede4; color: #1a5a3a; }
+    .tbtn[data-t="Publication"]      { background: #e4e0f2; color: #3a2a7a; }
+    .tbtn[data-t="Media collection"] { background: #dceedd; color: #2a5a2a; }
+
+    .filter-row { display: flex; align-items: flex-start; gap: 0.7rem; }
+    .fl { font-size: 0.68rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; padding-top: 0.3rem; white-space: nowrap; }
+    .tag-filters { display: flex; flex-wrap: wrap; gap: 0.28rem; flex: 1; }
+    .tag {
+      display: inline-block; font-size: 0.63rem; padding: 0.18rem 0.42rem;
+      border-radius: 2px; cursor: pointer;
+      font-family: 'Courier New', monospace;
+      border: 1.5px solid transparent; user-select: none; transition: opacity 0.15s;
+      text-transform: uppercase;
+    }
+    .tag:hover { opacity: 0.75; }
+    .tag.active { border-color: rgba(0,0,0,0.4); }
+    .clear-btn {
+      font-size: 0.68rem; padding: 0.2rem 0.6rem;
+      border: 1px solid #ccc; border-radius: 2px;
+      background: white; cursor: pointer; color: var(--muted);
+      font-family: 'Courier New', monospace; white-space: nowrap; align-self: flex-start;
+    }
+    .clear-btn:hover { background: var(--bg); }
+
+    .table-wrap { overflow-x: auto; padding: 1.5rem; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.84rem; background: var(--surface); box-shadow: 0 1px 5px rgba(0,0,0,0.07); min-width: 1160px; }
+    thead th {
+      text-align: left; padding: 0.75rem 0.85rem;
+      background: var(--hdr); color: #e0dbd2;
+      font-weight: normal; font-size: 0.68rem;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      cursor: pointer; user-select: none; white-space: nowrap;
+    }
+    thead th:hover { background: #2d2a27; }
+    thead th.sort-asc::after { content: ' ↑'; }
+    thead th.sort-desc::after { content: ' ↓'; }
+    thead th.nosort { cursor: default; }
+    thead th.nosort:hover { background: var(--hdr); }
+
+    tbody tr:hover td { background: #392912; }
+    td { padding: 0.8rem 0.85rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+
+    /* Type badge */
+    .tbadge {
+      display: inline-block; font-size: 0.6rem;
+      padding: 0.16rem 0.4rem; border-radius: 2px;
+      font-family: 'Courier New', monospace; white-space: nowrap;
+    }
+    .tbadge[data-t="Artist"]           { background: #4a4440; color: #f0ece4; }
+    .tbadge[data-t="Tool"]             { background: #d4ede4; color: #1a5a3a; }
+    .tbadge[data-t="Publication"]      { background: #e4e0f2; color: #3a2a7a; }
+    .tbadge[data-t="Media collection"] { background: #dceedd; color: #2a5a2a; }
+
+    .td-type  { min-width: 88px;  max-width: 95px; }
+    .td-name  { min-width: 148px; max-width: 175px; font-weight: bold; line-height: 1.35; font-size: 0.88rem; }
+    .td-brief { min-width: 195px; max-width: 250px; font-size: 0.78rem; color: var(--muted); font-style: italic; line-height: 1.6; }
+    .td-media { min-width: 155px; max-width: 210px; }
+    .tags-cell { display: flex; flex-wrap: wrap; gap: 0.22rem; }
+    .td-artwork  { min-width: 135px; max-width: 170px; font-size: 0.78rem; }
+    .artwork-item { font-style: italic; color: #3a3530; line-height: 1.4; margin-bottom: 0.2rem; padding-left: 0.6rem; border-left: 2px solid #c8c0b8; }
+    .td-kw { min-width: 118px; max-width: 155px; }
+    .kw { display: inline-block; background: #e6f0e0; color: #3a5a28; font-size: 0.62rem; padding: 0.16rem 0.38rem; border-radius: 2px; font-family: 'Courier New', monospace; margin: 0.1rem 0.08rem 0 0; }
+    .td-links { min-width: 178px; max-width: 235px; }
+    .links-cell a { display: block; color: #4a6fa0; text-decoration: none; font-size: 0.73rem; margin-bottom: 0.22rem; font-family: 'Courier New', monospace; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 215px; }
+    .links-cell a:hover { text-decoration: underline; color: #2d4f80; }
+    .none { color: #ccc; font-size: 0.75rem; }
+
+    .no-results { text-align: center; padding: 4rem 2rem; color: var(--muted); font-style: italic; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Digital & New Media Art Reference List</h1>
+  <p>Artists · Tools · Publications · Media Collections</p>
+</header>
+
+<div class="controls">
+  <div class="search-row">
+    <input id="search" type="text" placeholder="Search name, description, medium, artwork, keywords…" autocomplete="off">
+    <span class="count" id="count"></span>
+  </div>
+  <div class="type-row">
+    <span class="type-label">Reference Type</span>
+    <span class="tbtn ta" data-t="All" onclick="setType('All')">All</span>
+    <span class="tbtn" data-t="Artist" onclick="setType('Artist')">Artist</span>
+    <span class="tbtn" data-t="Tool" onclick="setType('Tool')">Tool</span>
+    <span class="tbtn" data-t="Publication" onclick="setType('Publication')">Publication</span>
+    <span class="tbtn" data-t="Media collection" onclick="setType('Media collection')">Media collection</span>
+  </div>
+  <div class="filter-row">
+    <span class="fl">All Keywords</span>
+    <div class="tag-filters" id="tag-filters"></div>
+    <button class="clear-btn" id="clear-btn">Clear all</button>
+  </div>
+</div>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th data-col="type">Type</th>
+        <th data-col="name">Name</th>
+        <th class="nosort">Brief</th>
+        <th data-col="media">Medium Keywords</th>
+        <th class="nosort">Suggested Artwork</th>
+        <th class="nosort">Course Keywords</th>
+        <th class="nosort">Links</th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+  <div class="no-results hidden" id="no-results">No entries match your search or filters.</div>
+</div>
+
+
+<script>
+const TC = {
+  /* ---- artistic mediums ---- */ /* ---- course keywords ---- *//* ---- tool / resource categories ---- *//* ---- publication / archive categories ---- */
+  'AI':                        {bg:'#ede8f5',c:'#4a2a7a'},
+  'ARCHIVE':                 {bg:'#e4e4dc',c:'#4a4a38'},
+  'ARTIST DOCUMENTATION':    {bg:'#e0f5e8',c:'#1a6030'},
+  'ARTICLE':                 {bg:'#f8f8d8',c:'#5a5a10'},
+  'ARCHITECTURAL PROJECTIONS': {bg:'#f0ead8',c:'#5a4020'},
+  'AUTOBIOGRAPHY':             {bg:'#fce4f8',c:'#7a2060'},
+  'BLOG':                    {bg:'#f8ead8',c:'#7a4010'},
+  'BODY IN TRANSLATION':                 {bg:'#f8e4f0',c:'#6a1a4a'},
+  'CODING PLATFORM':              {bg:'#d4ede0',c:'#1a5530'},
+  'CODE/DATA':                 {bg:'#d8f0e4',c:'#1a6040'},
+  'COLLAGE':                   {bg:'#fce8f2',c:'#7a2a5a'},
+  'COMPUTER GRAPHICS':         {bg:'#d8eef8',c:'#1a4a6a'},
+  'CONCEPTUAL':                {bg:'#e8e4f4',c:'#3a2a7a'},
+  'CURATOR':                   {bg:'#f8d8f0',c:'#7a1a7a'},
+  'DATAMOSHING':                         {bg:'#f5d8f2',c:'#7a1a6a'},
+  'DIGITAL EXHIBITION ARCHIVE':   {bg:'#d8f0f0',c:'#1a5555'},
+  'DIGITAL IMAGE':             {bg:'#d8f5f0',c:'#1a6060'},
+  'DRAWING':                   {bg:'#fdf5d8',c:'#6a5a10'},
+  'EXHIBITION DOCUMENTATION':{bg:'#d8f5f4',c:'#1a5558'},
+  'GAMES':                     {bg:'#e0f5d8',c:'#2a7a2a'},
+  'GLITCH':                    {bg:'#f2d8f8',c:'#6a1a7a'},
+  'GLOSSARY':                {bg:'#f8f4d8',c:'#625810'},
+  'IN BROWSER':                   {bg:'#d8f0e0',c:'#1a6035'},
+  'IMAGE GENERATOR':              {bg:'#ede8f5',c:'#4a2a7a'},
+  'IMAGES':                  {bg:'#e8eef8',c:'#2a3a65'},
+  'INSTALLATION':              {bg:'#fde8d8',c:'#7a3a1a'},
+  'INTERACTIVE':               {bg:'#d8eef8',c:'#1a4a7a'},
+  'INSTRUCTIONAL':             {bg:'#e4f4e8',c:'#2a6030'},
+  'KINETIC SCULPTURE':         {bg:'#f8e8d8',c:'#7a4020'},
+  'LANGUAGE AND LAYERING':               {bg:'#d8ecf8',c:'#1a3a6a'},
+  'MATERIAL TRANSLATION':      {bg:'#f5f0d8',c:'#6a5a1a'},
+  'MUSIC':                     {bg:'#f8d8e8',c:'#7a1a4a'},
+  'NARRATIVE':                 {bg:'#f8ead8',c:'#7a4a1a'},
+  'ONLINE':                    {bg:'#d8e4f8',c:'#1a3a7a'},
+  'ONLINE GALLERY':          {bg:'#d8eaf8',c:'#1a4a72'},
+  'PROGRAM OR APP':               {bg:'#d8f0e0',c:'#1a6035'},
+  'PLACE':                               {bg:'#d8f0e0',c:'#1a6a3a'},
+  'PUBLICATION':             {bg:'#e4e0f2',c:'#3a2a7a'},
+  'PERFORMANCE':               {bg:'#f8f0d8',c:'#6a5a1a'},
+  'PHOTOGRAPHY':               {bg:'#e0e8f8',c:'#2a3a7a'},
+  'PHOTOGRAMMETRY':            {bg:'#d8f5e8',c:'#1a6a4a'},
+  'PRINTMAKER':                {bg:'#e8f0f8',c:'#2a4a6a'},
+  'PUBLIC ART':                {bg:'#fde4d8',c:'#7a4a1a'},
+  'RECURSION':                           {bg:'#e4d8f5',c:'#4a1a7a'},
+  'REFERENCE':               {bg:'#eaeae8',c:'#4a4a42'},
+  'RESEARCH COLLECTIVE':     {bg:'#ead8f8',c:'#5a1a7a'},
+  'SCULPTURE':                 {bg:'#ead8d8',c:'#6a2a2a'},
+  'STAND ALONE GAME':        {bg:'#e0f5d8',c:'#2a7a2a'},
+  'TYPOLOGY':                            {bg:'#e8e8d8',c:'#4a4a20'},
+  //'TYPOGRAPHY':                {bg:'#e8e4dc',c:'#4a4030'},
+  'VIDEO PLATFORM':          {bg:'#fce8e8',c:'#7a2222'},
+  'VIDEO':                     {bg:'#fce8e8',c:'#7a2a2a'},
+  'VIRTUAL REALITY':           {bg:'#d8d8f8',c:'#2a2a7a'},
+  'WEBSITE':                      {bg:'#d8e4f8',c:'#1a3a7a'},
+  'WEBSITE BUILDING':        {bg:'#dce8f0',c:'#2a4a65'},
+  'WRITER':                    {bg:'#f4ead8',c:'#6a4a1a'},
+  '3D':                        {bg:'#d8e8f8',c:'#1a3a7a'},
+  
+};
+/* case-insensitive lookup — normalise to uppercase before checking TC */
+function ts(t){const c=TC[t.toUpperCase()]||{bg:'#e8e4e0',c:'#4a4440'};return`background:${c.bg};color:${c.c};`;}
+
+const DATA = [
+  /* ===== ARTISTS ===== */
+  {type:"Artist",name:"Analívia Cordeiro",brief:"Cordeiro is a video art pioneer from Brazil. She exploits processes in image recording to create animation-like videos with human subjects.",media:["VIDEO","PERFORMANCE","INSTRUCTIONAL"],artworks:[],keywords:[],links:[{u:"https://www.analivia.com.br",l:"analivia.com.br"}]},
+  {type:"Artist",name:"Andreas Gursky",brief:"Photographer who uses collage and digital photo manipulation to create realistic scenes of invented exuberance.",media:["PHOTOGRAPHY","COLLAGE"],artworks:["Media-Markt, 2016"],keywords:[],links:[{u:"https://www.andreasgursky.com/en",l:"andreasgursky.com"},{u:"https://www.andreasgursky.com/en/works/2016/media-markt",l:"Media-Markt (2016)"}]},
+  {type:"Artist",name:"Anna Ridler",brief:"Ridler works with datasets and 'AI' to discuss, interpret and catalog the natural world.",media:["ONLINE","VIDEO","CODE/DATA","COMPUTER GRAPHICS","INTERACTIVE","AI"],artworks:["Various Casual Occursions, 2023"],keywords:["COLLAGE", "MATERIAL TRANSLATION"],links:[{u:"https://annaridler.com/works/various-casual?filter=year&group=2023",l:"Various Casual Occursions"},{u:"https://annaridler.com/bio",l:"annaridler.com/bio"}]},
+  {type:"Artist",name:"Artie Vierkant",brief:"Notable for the series ImageObject, interested in the translation of artwork from digital space to physical space.",media:["CONCEPTUAL","INSTALLATION","ONLINE","MATERIAL TRANSLATION"],artworks:["Profile, 2016","Image objects"],keywords:["AUTOBIOGRAPHY", "BODY IN TRANSLATION","MATERIAL TRANSLATION"],links:[{u:"http://artievierkant.com/2016_ng_profile.php",l:"Profile, 2016"},{u:"http://artievierkant.com/imageobjects.php",l:"Image Objects"}]},
+  {type:"Artist",name:"Brad Tromel",brief:"",media:["CONCEPTUAL","ONLINE","VIDEO","WRITER","COLLAGE"],artworks:[],keywords:[],links:[{u:"https://bradtroemel.com",l:"bradtroemel.com"}]},
+  {type:"Artist",name:"Camille Henrot",brief:"",media:["PERFORMANCE","VIDEO","SCULPTURE"],artworks:["Grosse Fatigue, 2013"],keywords:[],links:[{u:"https://vimeo.com/86174818?fl=pl&fe=vl",l:"Grosse Fatigue (Vimeo)"}]},
+  {type:"Artist",name:"Cao Fei",brief:"She mixes social commentary, popular aesthetics, references to surrealism, and documentary conventions in her films and installations.",media:["CONCEPTUAL","INSTALLATION","VIDEO"],artworks:[],keywords:[],links:[{u:"http://www.caofei.com/about.aspx",l:"caofei.com"}]},
+  {type:"Artist",name:"Cassie McQuater",brief:"",media:["VIDEO","CODE/DATA","COMPUTER GRAPHICS","INTERACTIVE","GAMES","COLLAGE"],artworks:["Angela's Flood, 2020–2021"],keywords:[],links:[{u:"http://www.cassiemcquater.com/angelasFlood.html",l:"Angela's Flood"}]},
+  {type:"Artist",name:"Cecile B Evans",brief:"Examining digital technology's capacity to evoke human emotion, exploiting the democratic effects of emergent technologies (aka deep fakes). Their work Hyperlinks or it didn't happen can usually be found on YouTube.",media:["CONCEPTUAL","VIRTUAL REALITY","VIDEO"],artworks:[],keywords:[],links:[{u:"https://www.vdrome.org/cecile-b-evans-hyperlinks-or-it-didnt-happen",l:"Hyperlinks or it didn't happen"}]},
+  {type:"Artist",name:"Christina De Middel",brief:"Works with collage to construct realistic and impossible images.",media:["DIGITAL IMAGE","PHOTOGRAPHY","COLLAGE"],artworks:[],keywords:[],links:[{u:"http://www.lademiddel.com/projects.html",l:"lademiddel.com"}]},
+  {type:"Artist",name:"Constant Dullaart",brief:"",media:["CONCEPTUAL","ONLINE","CODE/DATA","COMPUTER GRAPHICS","DIGITAL IMAGE","AI","INSTALLATION"],artworks:["snowww crshahs, 2023"],keywords:["Language and Layering"],links:[{u:"https://constantdullaart.com/projects/snowww-crshahs",l:"snowww crshahs"}]},
+  {type:"Artist",name:"COOL 3D WORLD",brief:"",media:["VIDEO","3D"],artworks:[],keywords:[],links:[{u:"https://cool3dworld.com",l:"cool3dworld.com"}]},
+  {type:"Artist",name:"Danielle Brathwaite-Shirley",brief:"Brathwaite-Shirley makes narrative multimedia hypertext games based on their lived experience of being Black and trans. Many are playable in browser.",media:["ONLINE","VIDEO","COLLAGE","INTERACTIVE","GAMES","NARRATIVE"],artworks:["Resurrection Land"],keywords:[],links:[{u:"https://resurrectionland.com/",l:"Resurrection Land"},{u:"https://www.daniellebrathwaiteshirley.com/bio-1",l:"daniellebrathwaiteshirley.com"}]},
+  {type:"Artist",name:"David Szauder",brief:"",media:["GLITCH","PHOTOGRAPHY","AI","COLLAGE"],artworks:[],keywords:[],links:[{u:"https://www.davidarielszauder.com/#/failed/",l:"davidarielszauder.com"}]},
+  {type:"Artist",name:"Diane Severin Nguyen",brief:"",media:["VIDEO","PERFORMANCE"],artworks:[],keywords:[],links:[{u:"https://art21.org/watch/new-york-close-up/diane-severin-nguyens-transfigurations/",l:"Art21 — Transfigurations"}]},
+  {type:"Artist",name:"Dina Kelberman",brief:"Kelberman's work 'Im Google' is a hypnotising scroll of ocular sensory satisfaction (highly recommend).",media:["ONLINE","PHOTOGRAPHY","TYPOLOGY","AUTOBIOGRAPHY", "ARCHIVE"],artworks:["Im google, 2010–ongoing"],keywords:["TYPOLOGY","AUTOBIOGRAPHY","Language and Layering"],links:[{u:"https://dinakelberman.com",l:"dinakelberman.com"},{u:"https://imgoogle.dinakelberman.com",l:"Im Google"}]},
+  {type:"Artist",name:"Dr Christian Thompson",brief:"",media:["VIDEO","SCULPTURE","PERFORMANCE","PHOTOGRAPHY","COLLAGE"],artworks:[],keywords:[],links:[{u:"https://michaelreid.com.au/art-series/videos-various-series/",l:"Michael Reid Gallery"}]},
+  {type:"Artist",name:"Erin Coates",brief:"",media:["INSTALLATION","VIDEO","DRAWING","SCULPTURE","PERFORMANCE"],artworks:[],keywords:[],links:[{u:"https://www.erincoates.net/",l:"erincoates.net"}]},
+  {type:"Artist",name:"Filip Custic",brief:"",media:["PERFORMANCE","VIDEO","SCULPTURE"],artworks:[],keywords:["AUTOBIOGRAPHY","PLACE"],links:[{u:"https://solocontemporary.com/artists/filip-custic/",l:"Solo Contemporary"},{u:"https://www.polyesterzine.com/features/digital-bodies-capitalism-and-arca-an-interview-with-filip-custic",l:"Polyester Zine — interview"}]},
+  {type:"Artist",name:"Frieder Nake",brief:"Pioneer of computational arts from Germany. Began the Center of Excellence in digital art at the University of Bremen.",media:["CODE/DATA","COMPUTER GRAPHICS"],artworks:[],keywords:[],links:[{u:"http://dada.compart-bremen.de/",l:"compart-bremen.de"},{u:"https://dam.org/museum/artists_ui/artists/nake-frieder/matrix-multiplication/",l:"DAM — Matrix Multiplication"}]},
+  {type:"Artist",name:"Hito Steyerl",brief:"Steyerl's work How Not to be Seen can usually be found on YouTube.",media:["CONCEPTUAL","INSTALLATION","VIDEO","WRITER"],artworks:["How not to be seen"],keywords:["AUTOBIOGRAPHY", "BODY IN TRANSLATION"],links:[{u:"https://www.e-flux.com/journal/63/60894/duty-free-art/",l:"Duty Free Art (e-flux)"}]},
+  {type:"Artist",name:"Gabriel Massan",brief:"",media:["GAMES","NARRATIVE"],artworks:["Third World: The Bottom Dimension"],keywords:[],links:[{u:"https://store.steampowered.com/app/2154250/Third_World_The_Bottom_Dimension/",l:"Steam"}]},
+  {type:"Artist",name:"Ian Maclarty",brief:"Experimental game designer publishing commercial and non-commercial works.",media:["CODE/DATA","COMPUTER GRAPHICS","INTERACTIVE","GAMES"],artworks:[],keywords:[],links:[{u:"https://ianmaclarty.com",l:"ianmaclarty.com"}]},
+  {type:"Artist",name:"Ibiye Camp",brief:"Camp's work explores postcoloniality, technology, and the built environment, often utilizing architectural tools to create sound, video, textiles, augmented reality, and 3D objects, with a focus on the African Diaspora.",media:["VIDEO","PHOTOGRAMMETRY"],artworks:[],keywords:["MATERIAL TRANSLATION"],links:[{u:"https://ibiyecamp.com/INFO-Current-Upcomming-Shows",l:"ibiyecamp.com"}]},
+  {type:"Artist",name:"Jake Tobin",brief:"Was part of the Jogging Tumblr, a collaborative project between Tobin and a number of other net artists between 2012 and 2014.",media:["CONCEPTUAL","ONLINE","DRAWING","COLLAGE"],artworks:["Evaluate this time, 2014"],keywords:["Recursion"],links:[{u:"https://jaketobin.online/",l:"jaketobin.online"},{u:"https://vimeo.com/103805779",l:"Evaluate this time (Vimeo)"},{u:"https://thejogging.tumblr.com/",l:"The Jogging (Tumblr)"}]},
+  {type:"Artist",name:"James Bridle",brief:"Theorist discussing what he calls \"the new aesthetic\".",media:["ONLINE","WRITER","CODE/DATA","COLLAGE"],artworks:[],keywords:[],links:[{u:"https://new-aesthetic.tumblr.com/about",l:"New Aesthetic (Tumblr)"}]},
+  {type:"Artist",name:"Jannes Schimmel",brief:"Schimmel uses modding (changing or customising a game, computer or equipment) as a methodological approach to interactive digital sculpture.",media:["SCULPTURE","CODE/DATA","INTERACTIVE"],artworks:[],keywords:[],links:[{u:"https://youtu.be/9erZG2LkWhg?si=PXmD96PLi6JgVKLG",l:"YouTube"},{u:"https://janneschimmel.com/CV",l:"janneschimmel.com"}]},
+  {type:"Artist",name:"Tiyan Baker",brief:"Her practice draws on historical research, language, digital processes and material play to trace unseen relationships between words, place and stories.",media:["INSTALLATION","VIDEO","INTERACTIVE","GAMES"],artworks:[],keywords:["MATERIAL TRANSLATION","AUTOBIOGRAPHY"],links:[{u:"https://tiyanbaker.com/",l:"tiyanbaker.com"}]},
+  {type:"Artist",name:"Jason Phu",brief:"",media:["INSTALLATION","VIDEO","INTERACTIVE","GAMES"],artworks:[],keywords:[],links:[{u:"https://www.jasonphu.com/",l:"jasonphu.com"}]},
+  {type:"Artist",name:"Jayson Musson (aka Hennessy Youngman)",brief:"Institutional critique via alter ego on YouTube. Musson continues to produce work, although primarily offline.",media:["CONCEPTUAL","VIDEO","PERFORMANCE"],artworks:[],keywords:[],links:[{u:"https://www.youtube.com/user/HennesyYoungman/videos",l:"Hennessy Youngman (YouTube)"}]},
+  {type:"Artist",name:"John Robin-Bold",brief:"Looks at contemporary culture through digital consumption and online platforms.",media:["INSTALLATION","MUSIC","ONLINE","VIDEO","CONCEPTUAL"],artworks:[],keywords:[],links:[{u:"https://www.johnrobinbold.com/portfolio/",l:"johnrobinbold.com"},{u:"https://youtu.be/Rxrky7UCR6g?si=rHBldgs5zWf7R7Ks",l:"YouTube"}]},
+  {type:"Artist",name:"Jon Rafman",brief:"Artist interested in the emotional and social impact of technology (i.e. the internet, online games etc) on contemporary life.",media:["CONCEPTUAL","INSTALLATION","VIDEO","WRITER","GAMES","NARRATIVE"],artworks:[],keywords:["PLACE"],links:[{u:"https://jonrafman.com/",l:"jonrafman.com"}]},
+  {type:"Artist",name:"Jordan Wolfson",brief:"",media:["VIDEO","KINETIC SCULPTURE"],artworks:[],keywords:[],links:[{u:"https://nga.gov.au/exhibitions/jordan-wolfson-body-sculpture/",l:"NGA — Body Sculpture"}]},
+  {type:"Artist",name:"Julius Popp",brief:"Popp engineers large scale works with code, microcontrollers and sculpture elements. His works change through the use of scraped metadata from search aggregators.",media:["CODE/DATA","PUBLIC ART"],artworks:[],keywords:[],links:[{u:"https://www.youtube.com/watch?v=1Za2NgrFg_U",l:"YouTube"}]},
+  {type:"Artist",name:"Justine Varga",brief:"",media:["GLITCH","PHOTOGRAPHY"],artworks:[],keywords:[],links:[{u:"https://www.justinevarga.com",l:"justinevarga.com"},{u:"https://tolarnogalleries.com/artists/justine-varga/",l:"Tolarno Galleries"}]},
+  {type:"Artist",name:"Kim Asendorff",brief:"Uses pixel sorting algorithms to alter images.",media:["INSTALLATION","CODE/DATA","COMPUTER GRAPHICS","GLITCH","DIGITAL IMAGE"],artworks:[],keywords:[],links:[{u:"https://github.com/kimasendorf/ASDFPixelSort",l:"GitHub — ASDFPixelSort"}]},
+  {type:"Artist",name:"Korakrit Arunanondchai",brief:"Arunanondchai is a video artist. They draw from diverse references like popular culture, technology, geopolitics, and Buddhism to create elaborate performances, videos and installations.",media:["CONCEPTUAL","INSTALLATION","VIDEO","PERFORMANCE"],artworks:[],keywords:[],links:[{u:"https://www.moma.org/calendar/exhibitions/3707",l:"MoMA Exhibition"}]},
+  {type:"Artist",name:"Laszlo Maholy-Nagy",brief:"",media:["PHOTOGRAPHY","COLLAGE"],artworks:[],keywords:[],links:[{u:"https://www.moma.org/artists/4048-laszlo-moholy-nagy",l:"MoMA"}]},
+  {type:"Artist",name:"Lizzie Fitch & Ryan Trecartin",brief:"",media:["VIDEO","PERFORMANCE"],artworks:[],keywords:[],links:[]},
+  {type:"Artist",name:"Lucas Blalock",brief:"Blalock's imagery declares his use of Photoshop, instead of concealing it.",media:["GLITCH","DIGITAL IMAGE","PHOTOGRAPHY","COLLAGE"],artworks:[],keywords:[],links:[{u:"https://www.lucasblalock.com/dog-art-depicting-dogs-barking-training-and-doing-dog-agility/",l:"lucasblalock.com"},{u:"https://art21.org/watch/new-york-close-up/lucas-blalocks-digital-toolkit/",l:"Art21 — Digital Toolkit"}]},
+  {type:"Artist",name:"Lydia Trethewey",brief:"",media:["GLITCH","PHOTOGRAPHY","PRINTMAKER"],artworks:[],keywords:["MATERIAL TRANSLATION"],links:[{u:"https://www.trethewey.id.au",l:"trethewey.id.au"}]},
+  {type:"Artist",name:"Manfred Mohr",brief:"Mohr is difficult to summarise with such an expansive career.",media:["INSTALLATION","COMPUTER GRAPHICS","MUSIC","INTERACTIVE"],artworks:[],keywords:[],links:[{u:"http://www.emohr.com/",l:"emohr.com"}]},
+  {type:"Artist",name:"Marco Brambilla",brief:"",media:["INSTALLATION","VIDEO","COLLAGE","ARCHITECTURAL PROJECTIONS"],artworks:[],keywords:[],links:[{u:"https://marcobrambilla.com/about/",l:"marcobrambilla.com"}]},
+  {type:"Artist",name:"Mark Cypher",brief:"Cypher's 2011 PhD looked at the application of actor network theory in relation to digital artistic practice.",media:["CONCEPTUAL","INSTALLATION","WRITER","CODE/DATA","COMPUTER GRAPHICS"],artworks:["Propositions"],keywords:["MATERIAL TRANSLATION"],links:[{u:"https://markcypher.com",l:"markcypher.com"},{u:"https://www.markcypher.com/propos/propositions.php",l:"Propositions"}]},
+  {type:"Artist",name:"Maurizio Bolognini",brief:"Bolognini began creating computer generated artworks in the 1980s. They have interesting opinions on the computer as a tool in the production of an artwork.",media:["CONCEPTUAL","INSTALLATION","CODE/DATA"],artworks:[],keywords:[],links:[{u:"https://www.bolognini.org/intro.htm",l:"bolognini.org"}]},
+  {type:"Artist",name:"Michael Wolf",brief:"Photographer interested in mediated photographic techniques (e.g. via Google Maps).",media:["DIGITAL IMAGE","PHOTOGRAPHY"],artworks:[],keywords:["TYPOLOGY"],links:[{u:"https://photomichaelwolf.com",l:"photomichaelwolf.com"}]},
+  {type:"Artist",name:"Milos Rajković (SHOLIM)",brief:"",media:["VIDEO","3D"],artworks:[],keywords:[],links:[{u:"https://sholim.com",l:"sholim.com"}]},
+  {type:"Artist",name:"Mindy Seu",brief:"Seu is primarily a writer and designer interested in experimental approaches to website and community construction. Her projects are always an excellent source of hyperlinks and references.",media:["ONLINE","PERFORMANCE","WRITER","CURATOR"],artworks:[],keywords:[],links:[{u:"https://mindyseu.com/",l:"mindyseu.com"}]},
+  {type:"Artist",name:"Nick Salvatore",brief:"CONTENT WARNING: some of Salvatores datamoshed videos use explicit source material.",media:["VIDEO"],artworks:["Bellow, 2009"],keywords:["AUTOBIOGRAPHY", "DATAMOSHING"],links:[{u:"https://vimeo.com/3249630",l:"Bellow, 2009 (SELF PORTRAIT)"}]},
+  {type:"Artist",name:"Nikita Diakur",brief:"",media:["VIDEO","3D"],artworks:[],keywords:[],links:[{u:"https://www.youtube.com/watch?v=Q2VMWR8xlls",l:"YouTube"},{u:"https://nikitadiakur.com",l:"nikitadiakur.com"}]},
+  {type:"Artist",name:"Olia Lialina",brief:"Pioneer of internet based art practice and foremost expert in digital folklores. Lialina's book Turing Complete User (free PDF linked) is an interesting look at the human–computer interface.",media:["CONCEPTUAL","ONLINE","WRITER","COLLAGE"],artworks:["Summer, 2013","Turing Complete User, 2021 (book)"],keywords:[],links:[{u:"https://art.teleportacia.org",l:"art.teleportacia.org"},{u:"http://art.teleportacia.org/olia/summer/",l:"Summer (2013)"},{u:"https://books.ub.uni-heidelberg.de/arthistoricum/catalog/book/972?lang=en",l:"Turing Complete User (PDF)"}]},
+  {type:"Artist",name:"Pipilotti Rist",brief:"Technicolour explosion of colour through video projection and installation.",media:["INSTALLATION","VIDEO","COLLAGE"],artworks:[],keywords:[],links:[{u:"http://pipilottirist.net/",l:"pipilottirist.net"}]},
+  {type:"Artist",name:"Rafael Lozano-Hemmer",brief:"Uses technology to create participatory experiences. Interested in making complexity visible.",media:["CONCEPTUAL","INSTALLATION","CODE/DATA","PUBLIC ART"],artworks:[],keywords:["MATERIAL TRANSLATION"],links:[{u:"https://art21.org/watch/art-in-the-twenty-first-century/s10/rafael-lozano-hemmer-in-borderlands-extended-segment/",l:"Art21 — Borderlands"}]},
+  {type:"Artist",name:"Ryoji Ikeda",brief:"Ikeda is an artist and ambient techno producer. Working mostly in installation, he brings science and science fiction to the gallery through the mind of the machine.",media:["INSTALLATION","CODE/DATA","PUBLIC ART","MUSIC"],artworks:[],keywords:[],links:[{u:"http://www.digiart21.org/art/supersymmetry",l:"Supersymmetry (digiart21)"},{u:"https://www.ryojiikeda.com/biography/",l:"ryojiikeda.com"}]},
+  {type:"Artist",name:"Sarah Friend",brief:"Friend's work explores games, economics, and the self via engagement with emerging technology.",media:["ONLINE","VIDEO","DIGITAL IMAGE","COLLAGE"],artworks:[],keywords:[],links:[{u:"https://isthisa.com",l:"isthisa.com"}]},
+  {type:"Artist",name:"Seth Price",brief:"Their essay Dispersion will change how you think about originality and reproduction in art.",media:["CONCEPTUAL","WRITER","COLLAGE","PRINTMAKER"],artworks:["Dispersion (essay)"],keywords:[],links:[{u:"https://sethpriceimages.com/",l:"sethpriceimages.com"},{u:"http://sethpricestudio.com/",l:"sethpricestudio.com"},{u:"http://sethpricestudio.com/writingarchive/DIspersion.pdf",l:"Dispersion (PDF)"}]},
+  {type:"Artist",name:"SODAJERK",brief:"Soda Jerk is an artist duo who make sample-based films with a rogue documentary impulse.",media:["VIDEO","COLLAGE","CONCEPTUAL"],artworks:[],keywords:[],links:[{u:"https://sodajerk.info/",l:"sodajerk.info"},{u:"https://www.hellodankness.net/",l:"hellodankness.net"}]},
+  {type:"Artist",name:"Sue Gollifer",brief:"Gollifer is an artist, curator, writer and teacher in digital art and printmaking.",media:["DRAWING","COMPUTER GRAPHICS","COLLAGE","PRINTMAKER"],artworks:[],keywords:["MATERIAL TRANSLATION"],links:[{u:"https://youtu.be/1GxjwiJLkLc?si=pP5nkTfvHDiEgt-7",l:"YouTube"},{u:"https://computer-arts-society.com/casarchive/cas/sue-gollifer.html",l:"Computer Arts Society"},{u:"https://collections.vam.ac.uk/search/?id_person=A37817&page=1&page_size=15",l:"V&A Collection"}]},
+  {type:"Artist",name:"Sophia Ioannou Gjerding",brief:"",media:["INSTALLATION","VIDEO"],artworks:[],keywords:[],links:[{u:"https://s-i-g.dk/asset-everything-used-all-as-it-used-to-be",l:"s-i-g.dk"}]},
+  {type:"Artist",name:"Sohei Nishino",brief:"",media:["PHOTOGRAPHY","COLLAGE"],artworks:[],keywords:["PLACE"],links:[{u:"https://soheinishino.net",l:"soheinishino.net"}]},
+  {type:"Artist",name:"Takeshi Murata",brief:"Datamoshing pioneer.",media:["VIDEO","CODE/DATA","GLITCH"],artworks:["Monster Movie"],keywords:["Datamoshing"],links:[]},
+  {type:"Artist",name:"Trevor Paglen",brief:"Paglen is an artist and writer making work about surveillance. His subject matter is global, sensitive and often classified, requiring him to take on the role of investigative journalist in much of his research.",media:["CONCEPTUAL","ONLINE","CODE/DATA","PUBLIC ART","COMPUTER GRAPHICS","DIGITAL IMAGE","AI"],artworks:[],keywords:[],links:[{u:"https://paglen.studio/bio/",l:"paglen.studio"}]},
+  {type:"Artist",name:"Tega Brain",brief:"Tega is an Australian artist working in NYC, interested primarily in the crossover points between ecology and technology.",media:["INSTALLATION","ONLINE","CONCEPTUAL","KINETIC SCULPTURE"],artworks:[],keywords:[],links:[{u:"https://tegabrain.com/about",l:"tegabrain.com"}]},
+  {type:"Artist",name:"Trevor Yeung",brief:"The practice of Trevor Yeung consistently excavates the inner logics of closed systems and the way in which such systems contain and create emotional and behavioural conditions.",media:["CONCEPTUAL","INSTALLATION","INTERACTIVE"],artworks:[],keywords:[],links:[{u:"https://daily-lazy.com/2025/01/dl-review-trevor-yeung-courtyard-of-attachments-hong-kong-in-venice.html",l:"Daily Lazy — Review"},{u:"https://trevoryeung.net/",l:"trevoryeung.net"}]},
+  {type:"Artist",name:"Spacefiller",brief:"Collaboration between artists Alexander Nagy and Alexander Miller. Uses generative algorithms and projection mapping to create interactive visual and sound artworks.",media:["INSTALLATION","CODE/DATA","MUSIC","INTERACTIVE"],artworks:[],keywords:[],links:[{u:"https://vimeo.com/371007316",l:"Vimeo"}]},
+  {type:"Artist",name:"Valerie Sparks",brief:"",media:["PHOTOGRAPHY","COLLAGE"],artworks:[],keywords:[],links:[{u:"https://www.valeriesparks.com.au",l:"valeriesparks.com.au"}]},
+  {type:"Artist",name:"Vera Molnar",brief:"A pioneer of computational art, Molnar used computers and generative algorithms as tools for drawing.",media:["CODE/DATA","COMPUTER GRAPHICS"],artworks:[],keywords:[],links:[{u:"http://www.veramolnar.com",l:"veramolnar.com"},{u:"https://www.youtube.com/watch?v=kbsGh3fq1uc&t=71s",l:"YouTube"}]},
+  {type:"Artist",name:"Xanthe Dobbie",brief:"",media:["ONLINE","VIDEO","GLITCH","DIGITAL IMAGE","PHOTOGRAPHY","COLLAGE"],artworks:["Eidolon, 2020"],keywords:[],links:[{u:"https://stream.sydneyoperahouse.com/videos/shortwave-xanthe-dobbie-eidolon",l:"Eidolon (Sydney Opera House)"},{u:"https://xanthedobbie.com/",l:"xanthedobbie.com"}]},
+  {type:"Artist",name:"Xavi Bau",brief:"Photographer.",media:["PHOTOGRAPHY","COLLAGE"],artworks:["Ornithographies"],keywords:["Collage"],links:[{u:"https://xavibou.com/about-ornithographies/",l:"Ornithographies"}]},
+  {type:"Artist",name:"Yung Jake",brief:"Jake is a rapper and visual artist, interested in fusing the digital and physical worlds.",media:["VIDEO","COLLAGE","ONLINE","CONCEPTUAL","INSTALLATION"],artworks:["Datamosh, 2011"],keywords:["AUTOBIOGRAPHY", "DATAMOSHING", "BODY IN TRANSLATION","MATERIAL TRANSLATION","LANGUAGE AND LAYERING"],links:[{u:"https://yungjake.com",l:"Datamosh, 2011"},{u:"https://yungjake.com",l:"Artist Website"}]},
+  
+  /* ===== Artists that need better documentation =====
+  {type:"Artist",name:"Don Relyea",brief:"",media:["CONCEPTUAL",],artworks:["",""],keywords:["AUTOBIOGRAPHY", ],links:[{u:"http://www.donrelyea.com/generative_slitscan_art.html",l:"Artist Website"}]},
+  {type:"Artist",name:"Bob Weisz",brief:"",media:["CONCEPTUAL",],artworks:["",""],keywords:["AUTOBIOGRAPHY", ],links:[{u:"https://heywhatsupitsbob.com/creative", l:"Artist Website"}]}
+  
+
+
+
+  /* format: 
+  {type:"Artist",name:"",brief:"",media:["CONCEPTUAL",],artworks:["",""],keywords:["AUTOBIOGRAPHY", ],links:[{u:"",l:""}]}
+  
+  */
+  /* ===== TOOLS ===== */
+  {type:"Tool",name:"New Art City",brief:"Online platform for hosting digital exhibitions (2D, 3D and installation style exhibition options).",media:["3D","digital exhibition archive","IN BROWSER"],artworks:[],keywords:[],links:[{u:"https://newart.city/",l:"newart.city"}]},
+  {type:"Tool",name:"Photopea",brief:"In browser photo editing program.",media:["PROGRAM OR APP", "IN BROWSER"],artworks:[],keywords:[],links:[{u:"https://www.photopea.com",l:"photopea.com"}]},
+  {type:"Tool",name:"PhotoSounder (Michael Rouzic)",brief:"",media:["PROGRAM OR APP", "IN BROWSER"],artworks:[],keywords:[],links:[{u:"https://photosounder.com/examples.php",l:"photosounder.com"}]},
+  {type:"Tool",name:"Picture Synth",brief:"",media:["PROGRAM OR APP", "IN BROWSER"],artworks:[],keywords:[],links:[{u:"https://www.abc.se/~re/Coagula/Coagula.html",l:"abc.se — Coagula"}]},
+  {type:"Tool",name:"Hydra",brief:"In browser shader for creating live reactive visuals.",media:["CODING PLATFORM", "IN BROWSER"],artworks:[],keywords:[],links:[{u:"https://hydra.ojack.xyz",l:"hydra.ojack.xyz"}]},
+  {type:"Tool",name:"Twine",brief:"Coding platform for writing hypertext fiction.",media:["CODING PLATFORM", "IN BROWSER"],artworks:[],keywords:[],links:[{u:"https://twinery.org/",l:"twinery.org"}]},
+  {type:"Tool",name:"Space Hey",brief:"",media:[],artworks:[],keywords:[],links:[{u:"https://spacehey.com/",l:"spacehey.com"}]},
+  {type:"Tool",name:"Electric Zine Maker",brief:"",media:["in browser"],artworks:[],keywords:[],links:[{u:"https://alienmelon.itch.io/electric-zine-maker",l:"itch.io"}]},
+  {type:"Tool",name:"Shader Booth",brief:"In browser platform for creating face filters.",media:["CODING PLATFORM", "IN BROWSER"],artworks:[],keywords:[],links:[{u:"https://shaderbooth.com/",l:"shaderbooth.com"}]},
+  {type:"Tool",name:"Art Breeder",brief:"An AI tool for remixing images with interesting parameter controls.",media:["image generator","website"],artworks:[],keywords:[],links:[{u:"https://www.artbreeder.com/",l:"artbreeder.com"}]},
+
+  /* ===== PUBLICATIONS ===== */
+  {type:"Publication",name:"Rhizome",brief:"Archive of net art.",media:["Reference","Archive"],artworks:[],keywords:[],links:[{u:"https://anthology.rhizome.org",l:"anthology.rhizome.org"}]},
+  {type:"Publication",name:"e-flux",brief:"Publication on contemporary art often highlighting digital and new media art.",media:["Reference","Publication"],artworks:[],keywords:[],links:[{u:"https://www.e-flux.com",l:"e-flux.com"}]},
+  {type:"Publication",name:"Center for Art and Media Karlsruhe (ZKM)",brief:"Museum and Gallery whose mission is to continue the classical arts into the digital age.",media:["Reference","Archive","Online Gallery"],artworks:[],keywords:[],links:[{u:"https://zkm.de/en/zkm-digital",l:"zkm.de/en/zkm-digital"}]},
+  {type:"Publication",name:"cyber feminism index",brief:"A repository of links related to radical tech critical writing, art, activism etc from 1985–2023.",media:["Reference","Publication"],artworks:[],keywords:[],links:[{u:"https://cyberfeminismindex.com/",l:"cyberfeminismindex.com"}]},
+  {type:"Publication",name:"Archive of Digital Art",brief:"Archive of artists working in digital art.",media:["Reference","Archive"],artworks:[],keywords:[],links:[{u:"https://digitalartarchive.at/nc/home.html",l:"digitalartarchive.at"}]},
+  {type:"Publication",name:"Center for Excellence in Digital Art",brief:"Catalog of Artworks, People, Events, Publications and Institutions related to the production of digital art.",media:["Reference","Archive","Online Gallery"],artworks:[],keywords:[],links:[{u:"http://dada.compart-bremen.de/",l:"dada.compart-bremen.de"}]},
+  {type:"Publication",name:"Digital Art Museum (DAM)",brief:"Resource cataloging the history and practice of digital art.",media:[],artworks:[],keywords:[],links:[{u:"https://dam.org/museum/dam/about/",l:"dam.org"}]},
+  {type:"Publication",name:"Do Not Research",brief:"Publishing platform for writing, visual art, internet culture research etc.",media:["Reference","Publication"],artworks:[],keywords:[],links:[{u:"https://donotresearch.substack.com",l:"Current (Substack)"},{u:"https://legacy.donotresearch.net/about/",l:"Archive (legacy)"}]},
+  {type:"Publication",name:"Cari Institute of Aesthetics",brief:"Codification of aesthetic movements from the 20th century to today.",media:["Reference","Glossary","Research collective"],artworks:[],keywords:[],links:[{u:"https://cari.institute/aesthetics",l:"cari.institute/aesthetics"}]},
+  {type:"Publication",name:"documenta",brief:"Cutting edge contemporary art symposium that meets in Germany every 5 years.",media:["Reference","Exhibition Documentation"],artworks:[],keywords:[],links:[{u:"https://www.documenta.de/en/about#16_documenta_ggmbh",l:"documenta.de"}]},
+  {type:"Publication",name:"Art 21",brief:"Documents artists in the studio and exhibition spaces discussing their work and practice. Geared specifically towards educators and emerging artists.",media:["Reference","Artist Documentation"],artworks:[],keywords:[],links:[{u:"https://art21.org/",l:"art21.org"}]},
+  {type:"Publication",name:"Louisiana Channel",brief:"Similar to Art 21.",media:["Reference","Artist Documentation"],artworks:[],keywords:[],links:[{u:"https://channel.louisiana.dk/topics/art",l:"channel.louisiana.dk"}]},
+  {type:"Publication",name:"Fuse Kiwi",brief:"Randomised web explorer featuring a variety of artist websites.",media:["Reference","Archive","website"],artworks:[],keywords:[],links:[{u:"https://www.fuse.kiwi/",l:"fuse.kiwi"}]},
+  {type:"Publication",name:"The HTML Review",brief:"Selected artists and collectives using HTML in interesting ways.",media:["Reference","Publication","website"],artworks:[],keywords:[],links:[{u:"https://thehtml.review/03/",l:"thehtml.review"}]},
+  {type:"Publication",name:"Audio Cook Book",brief:"",media:["Reference","Blog"],artworks:[],keywords:[],links:[{u:"https://audiocookbook.org/tag/video/",l:"audiocookbook.org"}]},
+  {type:"Publication",name:"An Introduction to Early Web Aesthetics of Geocities",brief:"About Olia Lialina and Dragan Espenschied's online practice post web 1.0.",media:["Reference","Article"],artworks:[],keywords:[],links:[{u:"https://hyperallergic.com/65108/an-introduction-to-the-early-web-aesthetics-of-geocities/",l:"Hyperallergic"}]},
+  {type:"Publication",name:"Cloud Hiker",brief:"Randomised web explorer.",media:["Reference","Archive","website"],artworks:[],keywords:[],links:[{u:"https://cloudhiker.net/explore",l:"cloudhiker.net"}]},
+  {type:"Publication",name:"Future Shock",brief:"",media:["Reference","Online Gallery","website"],artworks:[],keywords:[],links:[{u:"https://futureshock.180studios.com/",l:"futureshock.180studios.com"}]},
+  {type:"Publication",name:"Art in America",brief:"Popular art journalism from an American perspective.",media:["Reference","Article"],artworks:[],keywords:[],links:[{u:"https://www.artnews.com/c/art-in-america/",l:"Art in America"},{u:"https://www.artnews.com/art-in-america/features/max-bense-gustav-metzger-generative-art-1202674265/",l:"The Social Conscience of Generative Art"}]},
+  {type:"Publication",name:"CSS Zen Garden",brief:"Dedicated to sharing the potential of CSS in website design.",media:["Reference","website building","Archive"],artworks:[],keywords:[],links:[{u:"http://www.csszengarden.com/221/",l:"csszengarden.com"}]},
+  {type:"Publication",name:"VernissageTV",brief:"Produces videos of gallery exhibitions.",media:["Reference","Exhibition Documentation"],artworks:[],keywords:[],links:[{u:"https://www.youtube.com/@vernissagetv",l:"YouTube"}]},
+  {type:"Publication",name:"Media Art Education",brief:"A blog on interdisciplinary approaches in media, arts & education at school & university level by Daniela Reimann.",media:["Reference","Blog"],artworks:[],keywords:[],links:[{u:"http://daniela-reimann.de/media-arts-education/",l:"daniela-reimann.de"}]},
+  {type:"Publication",name:"V2 Lab for Unstable Media",brief:"Interdisciplinary center for art and media technology in Rotterdam (the Netherlands).",media:["Reference","Publication","Archive"],artworks:[],keywords:[],links:[{u:"https://www.v2.nl/pages/about",l:"v2.nl"}]},
+  {type:"Publication",name:"Nowness",brief:"Video platform presenting art and culture from Asia.",media:["Reference","Archive","Video Platform"],artworks:[],keywords:[],links:[{u:"https://www.nowness.asia/topic/art",l:"nowness.asia"}]},
+  {type:"Publication",name:"UbuWeb",brief:"An archive of avant-garde art and artists — contains everything from Video Art, Dance, Conceptual Comics, Visual Poetry and Electronic Music Production Resources.",media:["Reference","Archive"],artworks:[],keywords:[],links:[{u:"https://www.ubu.com/index.html",l:"ubu.com"}]},
+  {type:"Publication",name:"Corners of the Internet Database",brief:"Little database kept by Matt Preburg of cool and interesting websites.",media:["Archive"],artworks:[],keywords:[],links:[{u:"https://docs.google.com/spreadsheets/d/1TVxcOA-xuxOifbtFv23K-JTJziOEmCEiXtfmZPxK0-E/edit?gid=0#gid=0",l:"Google Sheets"}]},
+  {type:"Publication",name:"Dispatch Review",brief:"Critique and journalism on Arts in Perth.",media:["Reference","Publication"],artworks:[],keywords:[],links:[{u:"https://dispatchreview.info",l:"dispatchreview.info"}]},
+  {type:"Publication",name:"An Informal Catalogue of Slit-Scan Video Artworks and Research",brief:"Historical look at the photographic phenomenon slitscanning.",media:["Reference","Publication"],artworks:[],keywords:[],links:[{u:"https://www.flong.com/archive/texts/lists/slit_scan/index.html",l:"Flong Article"}]},
+  /* ===== MEDIA COLLECTIONS ===== */
+  {type:"Media collection",name:"Film Grab",brief:"",media:["Images","Archive","website"],artworks:[],keywords:[],links:[{u:"https://film-grab.com/",l:"film-grab.com"}]},
+  {type:"Media collection",name:"WA Museum Collection Portal",brief:"Archive of the WA Museum collection.",media:["Images","Archive","website"],artworks:[],keywords:[],links:[{u:"https://museum.wa.gov.au/online-collections/",l:"museum.wa.gov.au"}]},
+  {type:"Media collection",name:"National Library Picture Portal",brief:"Archive of the national library picture collection.",media:["Images","Archive","website"],artworks:[],keywords:[],links:[{u:"https://www.library.gov.au/discover/what-we-collect/pictures-collection",l:"library.gov.au"}]},
+  {type:"Media collection",name:"Rijksmuseum Online Collection",brief:"The entire Rijksmuseum collection is available on their website.",media:["Images","Archive","website"],artworks:[],keywords:[],links:[{u:"https://www.rijksmuseum.nl/en/rijksstudio",l:"rijksmuseum.nl"}]},
+  {type:"Media collection",name:"Smithsonian Coral Digitisation Archive",brief:"The Smithsonian recording and archive of data on corals including downloadable 3D models. Also contains many other digitised collections.",media:["3D","Archive","website"],artworks:[],keywords:[],links:[{u:"https://3d.si.edu/corals",l:"3d.si.edu/corals"}]},
+  {type:"Media collection",name:"NASA Mission Archive",brief:"",media:["Images","Archive","website"],artworks:[],keywords:[],links:[{u:"https://www.nasa.gov/missions/",l:"nasa.gov/missions"}]},
+  {type:"Media collection",name:"HiRise Images of Space Objects",brief:"University of Arizona collection of high definition images of outer-space objects such as moons, planets, craters etc.",media:["Images","3D","Archive","website"],artworks:[],keywords:[],links:[{u:"https://www.uahirise.org/catalog/",l:"uahirise.org"}]},
+  {type:"Media collection",name:"Art Breeder",brief:"An AI tool for remixing images with interesting parameter controls.",media:["Image generator","website","AI"],artworks:[],keywords:[],links:[{u:"https://www.artbreeder.com/",l:"artbreeder.com"}]},
+];
+
+/* ---- collect all unique media + keyword tags ---- */
+const allTags = [...new Set(DATA.flatMap(e => [...e.media, ...e.keywords]))].sort();
+
+let activeType = 'All';
+let activeFilters = new Set();
+let currentSearch = '';
+let sortCol = 'type';
+let sortDir = 1;
+
+function tagHtml(tag, clickable) {
+  const s = ts(tag);
+  const cls = 'tag' + (activeFilters.has(tag) ? ' active' : '');
+  const oc = clickable ? `onclick="toggleFilter('${tag.replace(/'/g,"\\'")}');event.stopPropagation();"` : '';
+  return `<span class="${cls}" style="${s}" ${oc}>${tag}</span>`;
+}
+
+function renderFilters() {
+  document.getElementById('tag-filters').innerHTML = allTags.map(t => {
+    const s = ts(t);
+    const cls = 'tag' + (activeFilters.has(t) ? ' active' : '');
+    return `<span class="${cls}" style="${s}" onclick="toggleFilter('${t.replace(/'/g,"\\'")}')">​${t}</span>`;
+  }).join('');
+}
+
+function renderTable() {
+  const tbody = document.getElementById('tbody');
+  const noRes = document.getElementById('no-results');
+  const countEl = document.getElementById('count');
+
+  let data = [...DATA];
+
+  // Type filter
+  if (activeType !== 'All') data = data.filter(e => e.type === activeType);
+
+  // Medium + keyword tag filter
+  if (activeFilters.size > 0) data = data.filter(e =>
+    [...e.media, ...e.keywords].some(t => activeFilters.has(t))
+  );
+
+  // Search
+  if (currentSearch) {
+    const q = currentSearch.toLowerCase();
+    data = data.filter(e =>
+      e.name.toLowerCase().includes(q) ||
+      e.brief.toLowerCase().includes(q) ||
+      e.media.join(' ').toLowerCase().includes(q) ||
+      e.artworks.join(' ').toLowerCase().includes(q) ||
+      e.keywords.join(' ').toLowerCase().includes(q)
+    );
+  }
+
+  // Sort
+  data.sort((a, b) => {
+    let av = '', bv = '';
+    if (sortCol === 'type') { av = a.type; bv = b.type; }
+    else if (sortCol === 'name') { av = a.name; bv = b.name; }
+    else if (sortCol === 'media') { av = a.media[0]||''; bv = b.media[0]||''; }
+    return sortDir * av.localeCompare(bv);
+  });
+
+  countEl.textContent = `${data.length} of ${DATA.length}`;
+
+  if (data.length === 0) {
+    tbody.innerHTML = '';
+    noRes.classList.remove('hidden');
+    return;
+  }
+  noRes.classList.add('hidden');
+
+  tbody.innerHTML = data.map(e => {
+    const mediaTags = e.media.length ? `<div class="tags-cell">${e.media.map(m => tagHtml(m, true)).join('')}</div>` : '<span class="none">—</span>';
+    const artworkHtml = e.artworks.length ? e.artworks.map(a => `<div class="artwork-item">${a}</div>`).join('') : '<span class="none">—</span>';
+    const kwHtml = e.keywords.length ? `<div class="tags-cell">${e.keywords.map(k => tagHtml(k, true)).join('')}</div>` : '<span class="none">—</span>';
+    const linksHtml = e.links.length ? e.links.map(l => `<a href="${l.u}" target="_blank" rel="noopener">${l.l}</a>`).join('') : '<span class="none">—</span>';
+    return `<tr>
+      <td class="td-type"><span class="tbadge" data-t="${e.type}">${e.type}</span></td>
+      <td class="td-name">${e.name}</td>
+      <td class="td-brief">${e.brief || '<span class="none">—</span>'}</td>
+      <td class="td-media">${mediaTags}</td>
+      <td class="td-artwork">${artworkHtml}</td>
+      <td class="td-kw">${kwHtml}</td>
+      <td class="td-links"><div class="links-cell">${linksHtml}</div></td>
+    </tr>`;
+  }).join('');
+}
+
+function setType(t) {
+  activeType = t;
+  document.querySelectorAll('.tbtn').forEach(b => b.classList.toggle('ta', b.dataset.t === t));
+  renderTable();
+}
+
+function toggleFilter(tag) {
+  activeFilters.has(tag) ? activeFilters.delete(tag) : activeFilters.add(tag);
+  renderFilters();
+  renderTable();
+}
+
+document.getElementById('search').addEventListener('input', function() {
+  currentSearch = this.value.trim();
+  renderTable();
+});
+
+document.getElementById('clear-btn').addEventListener('click', function() {
+  activeFilters.clear();
+  currentSearch = '';
+  activeType = 'All';
+  document.getElementById('search').value = '';
+  document.querySelectorAll('.tbtn').forEach(b => b.classList.toggle('ta', b.dataset.t === 'All'));
+  renderFilters();
+  renderTable();
+});
+
+document.querySelectorAll('thead th[data-col]').forEach(th => {
+  th.addEventListener('click', function() {
+    const col = this.dataset.col;
+    sortDir = (sortCol === col) ? sortDir * -1 : 1;
+    sortCol = col;
+    document.querySelectorAll('thead th').forEach(t => t.classList.remove('sort-asc','sort-desc'));
+    this.classList.add(sortDir === 1 ? 'sort-asc' : 'sort-desc');
+    renderTable();
+  });
+});
+
+renderFilters();
+renderTable();
+document.querySelector('thead th[data-col="type"]').classList.add('sort-asc');
+</script>
+</body>
+<footer>
+  <div>
+    <p>Last updated 23 April 2026 by Carlie Germs for VISA2004.</p><br>
+    <a href="index.html" target="_blank">*ੈ✩‧₊˚return.ೃ࿔꠶:･˳</a>
+  </div>
+</footer>
+</html>

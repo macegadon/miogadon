@@ -1,0 +1,68 @@
+<!DOCTYPE html> <!-- This announces to the machine that the file is written in HTML-->
+<!-- this is a comment, its not displayed on the page but you can use it to leave notes for youself/inquisitive visitors.-->
+
+<head> <!-- The head is where the page begins, here we give important instructons on how to display content contained on the page. -->
+    <link href="style/examplestyle.css" rel="stylesheet"> <!-- this links your HTML file to your style sheet, which gives instructions on how the page is displayed including; font, background, layout, favicon -->
+    <title>Layered image positioning example</title> <!-- The title of your page will display in the tab. -->
+</head>
+<body> <!-- The body contains the majority of the content on the page, the bulk of your text, images, links, elements will all be located in here.-->
+    <div class="box1">
+        <h1>Absolute image positioning</h1> <!-- this example precicely places images on the webpage like a canvas regardless of how large the browser window is-->
+    </div>
+    <div class="pics"> <!-- the pics class is telling the images to be displayed relative to the div position, by combining this div attribute with each picture having the position:absolute attribute, the images can be layered over each other in precice locatiions -->
+        <img src="assets/welcomebutterf.gif" width="700" height="400" style="position:absolute; top:100px;  left:150px; opacity: 0.8;">
+        <img src="assets/welcomebutterf.gif" width="600" height="700" style="position:absolute; top:300px;  left:50px; opacity: 0.5;">
+        <img src="assets/welcomebutterf.gif" width="800" height="500" style="position:absolute; top:110px;  left:70px; opacity: 0.6;">
+        <img src="assets/welcomebutterf.gif" width="180" height="100" style="position:absolute; top:200px;  left:80px; opacity: 0.8;">
+        <img src="assets/welcomebutterf.gif" width="1000" height="100" style="position:absolute; top:250px;  left:100px; opacity: 0.5;">
+        <img src="assets/liveserver.png" width="400" height="500" style="position:absolute; top:70px;  left:200px; opacity: 0.1;">
+        <img src="assets/liveserver.png" width="700" height="500" style="position:absolute; top:210px;  left:100px; opacity: 0.2;">
+        <img src="assets/prettier.png" width="600" height="100" style="position:absolute; top:200px;  left:80px; opacity: 0.2;">
+        <img src="assets/prettier.png" width="180" height="100" style="position:absolute; top:250px;  left:160px; opacity: 0.4;">
+
+        <!--create a gradient of these three pictures usiing absolute positions and -->
+
+        <img src="assets/welcomebutterf.gif" width="300" height="200" style="position:absolute; top:1300px;  left:30px; opacity: 0.9;">
+        <img src="assets/liveserver.png" width="300" height="200" style="position:absolute; top:1300px;  left:280px; opacity: 0.8;">
+        <img src="assets/prettier.png" width="300" height="200" style="position:absolute; top:1300px;  left:530px; opacity: 0.7;">
+        <img src="assets/welcomebutterf.gif" width="300" height="200" style="position:absolute; top:1300px;  left:780px; opacity: 0.6;">
+        <img src="assets/liveserver.png" width="300" height="200" style="position:absolute; top:1300px;  left:1030px; opacity: 0.5;">
+        <img src="assets/prettier.png" width="300" height="200" style="position:absolute; top:1300px;  left:1280px; opacity: 0.4;">
+
+        <img src="assets/welcomebutterf.gif" width="300" height="200" style="position:absolute; top:1450px;  left:30px; opacity: 0.7;">
+        <img src="assets/liveserver.png" width="300" height="200" style="position:absolute; top:1450px;  left:280px; opacity: 0.6;">
+        <img src="assets/prettier.png" width="300" height="200"style="position:absolute; top:1450px;  left: 530px; opacity: 0.5;">
+        <img src="assets/welcomebutterf.gif" width="300" height="200" style="position:absolute; top:1450px;  left:780px; opacity: 0.4;">
+        <img src="assets/liveserver.png" width="300" height="200" style="position:absolute; top:1450px;  left:1030px; opacity: 0.3;">
+        <img src="assets/prettier.png" width="300" height="200" style="position:absolute; top:1450px;  left:1280px; opacity: 0.2;">
+
+        <img src="assets/welcomebutterf.gif" width="300" height="200" style="position:absolute; top:1600px;  left:30px; opacity: 0.5;">
+        <img src="assets/liveserver.png" width="300" height="200" style="position:absolute; top:1600px;  left:280px; opacity: 0.4;">
+        <img src="assets/prettier.png" width="300" height="200"style="position:absolute; top:1600px;  left: 530px; opacity: 0.3;">
+        <img src="assets/welcomebutterf.gif" width="300" height="200" style="position:absolute; top:1600px;  left:780px; opacity: 0.2;">
+        <img src="assets/liveserver.png" width="300" height="200" style="position:absolute; top:1600px;  left:1030px; opacity: 0.1;">
+        <img src="assets/prettier.png" width="300" height="200" style="position:absolute; top:1600px;  left:1280px; opacity: 0.05;">
+
+        <img src="assets/welcomebutterf.gif" width="300" height="200" style="position:absolute; top:1750px;  left:30px; opacity: 0.3;">
+        <img src="assets/liveserver.png" width="300" height="200" style="position:absolute; top:1750px;  left:280px; opacity: 0.2;">
+        <img src="assets/prettier.png" width="300" height="200"style="position:absolute; top:1750px;  left: 530px; opacity: 0.1;">
+        <img src="assets/welcomebutterf.gif" width="300" height="200" style="position:absolute; top:1750px;  left:780px; opacity: 0.05;">
+        <img src="assets/liveserver.png" width="300" height="200" style="position:absolute; top:1750px;  left:1030px; opacity: 0.02;">
+        <img src="assets/prettier.png" width="300" height="200" style="position:absolute; top:1750px;  left:1280px; opacity: 0.00;">
+
+        <img src="assets/welcomebutterf.gif" width="300" height="200" style="position:absolute; top:1900px;  left:30px; opacity: 0.1;">
+        <img src="assets/liveserver.png" width="300" height="200" style="position:absolute; top:1900px;  left:280px; opacity: 0.05;">
+        <img src="assets/prettier.png" width="300" height="200"style="position:absolute; top:1900px;  left: 530px; opacity: 0.02;">
+        <img src="assets/welcomebutterf.gif" width="300" height="200" style="position:absolute; top:1750px;  left:780px; opacity: 0.05;">
+        <img src="assets/liveserver.png" width="300" height="200" style="position:absolute; top:1750px;  left:1030px; opacity: 0.05;">
+        <img src="assets/prettier.png" width="300" height="200" style="position:absolute; top:1750px;  left:1280px; opacity: 0.00;">
+
+    </div>
+</body>
+<footer> <!-- The footer is a the end of the page, it's totally optional and typically contains a note about the last update, or a dis on your sworn enemy.-->
+    <p style="text-align: right;">
+        See code comments for more details. <br> 
+        Made with love by [your name here] &lt;3 <br>
+        <a href="index.html" target="_blank">*ੈ✩‧₊˚return.ೃ࿔꠶:･˳</a>
+    </p>
+</footer>
